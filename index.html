@@ -7,65 +7,61 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="/fonts.googleapis.com/css2.css" rel="stylesheet">
-    
-    <!-- Load User Configuration First -->
-    <script src="/wedding-config.js"></script>
-
     <title>Wedding Andrea &amp; Pedro</title>
     <meta name="google" content="notranslate">
-    <meta id="meta-description" name="description" content="This invitation is exclusively for you">
+    <meta name="description" content="This invitation is exclusively for you">
     
     <meta property="og:type" content="website" />
-    <meta id="og-title" property="og:title" content="Wedding Andrea &amp; Pedro">
-    <meta id="og-description" property="og:description" content="This invitation is exclusively for you">
+    <meta property="og:title" content="Wedding Andrea &amp; Pedro">
+    <meta property="og:description" content="This invitation is exclusively for you">
     <meta property="og:image" content="/assets/intro-poster-new-BU7qGwfU.jpg">
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta id="twitter-title" name="twitter:title" content="Wedding Andrea &amp; Pedro">
-    <meta id="twitter-description" name="twitter:description" content="This invitation is exclusively for you">
+    <meta name="twitter:title" content="Wedding Andrea &amp; Pedro">
+    <meta name="twitter:description" content="This invitation is exclusively for you">
     <meta name="twitter:image" content="/assets/intro-poster-new-BU7qGwfU.jpg">
   
     <style>
-      /* --- GLOBAL STYLES & OPTIMIZATIONS --- */
-      :root {
-        --ivory-primary: #fdfbf7;
-        --gold-primary: #d4af37;
-        --text-main: #333333;
-        --text-secondary: #666666;
-      }
-
-      html, body {
+      /* Base optimizations */
+      html {
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        background-color: var(--ivory-primary);
-        margin: 0;
-        padding: 0;
-        width: 100%;
+        background-color: #fdfbf7;
         overflow-x: hidden;
-        color: var(--text-main);
-        font-family: serif; /* Better fallback for wedding theme */
       }
 
       body {
         opacity: 0;
-        transition: opacity 1s ease-in-out;
+        transition: opacity 0.8s ease-in-out;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        width: 100%;
       }
 
       body.loaded {
         opacity: 1;
       }
 
-      /* --- CLEANUP --- */
-      [class*="LanguageProvider"],
-      [class*="language-switcher"],
-      .fixed.top-4.right-4, 
-      .absolute.top-4.right-4,
-      div[class*="blur-"][class*="xl"] {
+      /* Remove the white spotlight glow and language switcher */
+      div[class*="blur-"][class*="xl"], 
+      div[class*="blur-"][class*="2xl"], 
+      div[class*="blur-"][class*="3xl"] {
         display: none !important;
       }
 
-      /* --- HERO VIDEO --- */
+      /* Hide top-right fixed/absolute elements (language switcher location) */
+      .fixed.top-4.right-4, 
+      .absolute.top-4.right-4,
+      .fixed.top-5.right-5,
+      .absolute.top-5.right-5,
+      [class*="LanguageProvider"],
+      [class*="language-switcher"] {
+        display: none !important;
+      }
+
+      /* Hero Video Background */
       #hero-video {
         position: absolute;
         top: 0;
@@ -74,185 +70,118 @@
         height: 100%;
         z-index: 0;
         object-fit: cover;
-        filter: brightness(0.75) saturate(1.1); /* Slightly darker for better text contrast */
+        filter: brightness(0.8) saturate(1.1);
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
         pointer-events: none;
       }
 
+      #hero-video.visible {
+        opacity: 1;
+      }
+
+      /* Section transparency for Hero */
       .hero-active {
         background-color: transparent !important;
         position: relative;
         z-index: 1;
-        min-height: 100vh;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
+        overflow: hidden;
       }
 
-      /* --- LAYOUT & SPACING --- */
-      #root, #root > div {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
+      /* Premium Section Entry Animations */
+      .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(15px); /* Reduced distance for subtler feel */
+        transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        will-change: transform, opacity;
+      }
+
+      .reveal-on-scroll.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Fix for squashed images and layout issues */
+      img {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      /* Ensure images intended to cover sections do so correctly */
+      [class*="h-screen"] img, 
+      [class*="h-["] img,
+      [class*="min-h-screen"] img {
+        object-fit: cover;
+      }
+
+      /* Fix for layout gaps without forcing flex on root */
+      #root {
+        width: 100%;
+        position: relative;
       }
 
       section, [class*="min-h-screen"] {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 80px 0 !important; /* Consistent section padding */
-        position: relative !important;
+        width: 100%;
+        position: relative;
         box-sizing: border-box;
-      }
-
-      /* Reset padding for full-height sections */
-      [class*="h-screen"], [class*="min-h-screen"]:first-of-type {
-        padding: 0 !important;
-      }
-
-      /* --- IMAGE OPTIMIZATION --- */
-      img {
-        display: block !important;
-        max-width: 100% !important;
-        height: auto;
-        margin: 0 auto;
-        transition: transform 0.5s ease;
-      }
-
-      [class*="h-screen"] img, 
-      [class*="h-["] img, 
-      [class*="min-h-screen"] img,
-      [class*="object-cover"] {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-      }
-
-      /* --- VISUAL POLISH --- */
-      h1, h2, h3, .font-serif {
-        letter-spacing: 0.05em;
-        line-height: 1.4;
-      }
-
-      [class*="bg-ivory"], [class*="bg-background"] {
-        background-color: var(--ivory-primary) !important;
-      }
-
-      /* Interactive feel */
-      a, button {
-        transition: all 0.3s ease;
-      }
-
-      /* Better typography for timeline and info */
-      p {
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        line-height: 1.8;
       }
     </style>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const config = window.WEDDING_CONFIG || {};
+        // Fade in body
+        setTimeout(() => document.body.classList.add('loaded'), 50);
 
-        // 1. Update Head & Meta Details
-        const updateHead = () => {
-          if (config.brideName && config.groomName) {
-            const title = `Wedding ${config.brideName} & ${config.groomName}`;
-            document.title = title;
-            const ogTitle = document.getElementById('og-title');
-            const twTitle = document.getElementById('twitter-title');
-            if (ogTitle) ogTitle.setAttribute('content', title);
-            if (twTitle) twTitle.setAttribute('content', title);
-          }
-          if (config.invitationText) {
-            const mDesc = document.getElementById('meta-description');
-            const ogDesc = document.getElementById('og-description');
-            const twDesc = document.getElementById('twitter-description');
-            if (mDesc) mDesc.setAttribute('content', config.invitationText);
-            if (ogDesc) ogDesc.setAttribute('content', config.invitationText);
-            if (twDesc) twDesc.setAttribute('content', config.invitationText);
-          }
-        };
-        updateHead();
-
-        // 2. Advanced Dynamic Text Injection
-        const injectDynamicText = () => {
-          const walk = (node) => {
-            if (node.nodeType === 3) { // Text node
-              let text = node.nodeValue;
-              let changed = false;
-
-              // Priority 1: Exact Hero Title Match
-              if (config.heroTitle && text.trim() === "Andrea & Pedro") {
-                text = config.heroTitle;
-                changed = true;
-              } else {
-                // Priority 2: Pattern Replacements
-                if (config.brideName && text.includes('Andrea')) {
-                  text = text.replace(/Andrea/g, config.brideName);
-                  changed = true;
-                }
-                if (config.groomName && text.includes('Pedro')) {
-                  text = text.replace(/Pedro/g, config.groomName);
-                  changed = true;
-                }
-                if (config.weddingDate && text.includes('12 September 2026')) {
-                  text = text.replace(/12 September 2026/g, config.weddingDate);
-                  changed = true;
-                }
-                if (config.venueName && text.includes('Hedsor House')) {
-                  text = text.replace(/Hedsor House/g, config.venueName);
-                  changed = true;
-                }
-                if (config.heroSubtitle && text.trim() === "WE'RE GETTING MARRIED") {
-                  text = config.heroSubtitle;
-                  changed = true;
-                }
-              }
-
-              if (changed) {
-                node.nodeValue = text;
-              }
-            } else if (node.nodeType === 1 && node.childNodes) {
-              if (node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {
-                for (let i = 0; i < node.childNodes.length; i++) {
-                  walk(node.childNodes[i]);
-                }
-              }
-            }
-          };
-
-          const root = document.getElementById('root');
-          if (root) walk(root);
-        };
-
-        // 3. Move Hero Video & Section Detection
+        const video = document.getElementById('hero-video');
+        
+        // Optimize video placement
         const moveVideo = () => {
-          const video = document.getElementById('hero-video');
+          // Look for the first section that is likely the hero
           const sections = document.querySelectorAll('#root section, #root [class*="min-h-screen"]');
           if (sections.length > 0) {
             const hero = sections[0];
             if (video && !hero.contains(video)) {
               hero.classList.add('hero-active');
+              hero.style.position = 'relative';
               hero.insertBefore(video, hero.firstChild);
               video.style.display = 'block';
-              video.play().catch(() => {});
+              setTimeout(() => {
+                video.classList.add('visible');
+                video.play().catch(() => {});
+              }, 100);
             }
-            injectDynamicText();
           }
         };
 
-        document.body.classList.add('loaded');
-        const observer = new MutationObserver(moveVideo);
-        observer.observe(document.body, { 
-          childList: true, 
-          subtree: true,
-          characterData: true 
+        // MutationObserver for React mount
+        const observer = new MutationObserver((mutations) => {
+          moveVideo();
+          
+          // Add reveal classes to sections (skipping hero)
+          const sections = document.querySelectorAll('#root section, #root > div > div:not([class*="fixed"])');
+          sections.forEach((section, index) => {
+            if (index === 0) return; // Skip hero
+            if (!section.classList.contains('reveal-on-scroll') && !section.contains(video)) {
+              // Ensure children are properly sized
+              section.style.width = '100%';
+              section.classList.add('reveal-on-scroll');
+              revealObserver.observe(section);
+            }
+          });
         });
-        
+
+        // IntersectionObserver for scroll animations
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+              revealObserver.unobserve(entry.target); // Only animate once
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+
+        observer.observe(document.body, { childList: true, subtree: true });
         window.addEventListener('load', moveVideo);
-        setTimeout(moveVideo, 800);
       });
     </script>
     <script type="module" crossorigin src="/assets/index-CvER8GyV.js"></script>
