@@ -151,14 +151,20 @@
               let text = node.nodeValue;
               let changed = false;
 
-              // Replace Names
-              if (config.brideName && text.includes('Andrea')) {
-                text = text.replace(/Andrea/g, config.brideName);
+              // Replace Full Hero Title if found exactly
+              if (config.heroTitle && text.trim() === "Andrea & Pedro") {
+                text = config.heroTitle;
                 changed = true;
-              }
-              if (config.groomName && text.includes('Pedro')) {
-                text = text.replace(/Pedro/g, config.groomName);
-                changed = true;
+              } else {
+                // Otherwise replace individual parts
+                if (config.brideName && text.includes('Andrea')) {
+                  text = text.replace(/Andrea/g, config.brideName);
+                  changed = true;
+                }
+                if (config.groomName && text.includes('Pedro')) {
+                  text = text.replace(/Pedro/g, config.groomName);
+                  changed = true;
+                }
               }
               
               // Replace Dates & Venue
@@ -175,7 +181,6 @@
                 node.nodeValue = text;
               }
             } else if (node.nodeType === 1 && node.childNodes) {
-              // Don't traverse scripts or styles
               if (node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {
                 for (let i = 0; i < node.childNodes.length; i++) {
                   walk(node.childNodes[i]);
@@ -201,13 +206,11 @@
               video.style.display = 'block';
               video.play().catch(() => {});
             }
-            // Always run injection when sections are detected/updated
             injectDynamicText();
           }
         };
 
         document.body.classList.add('loaded');
-        // More aggressive mutation observer to catch React updates
         const observer = new MutationObserver((mutations) => {
           moveVideo();
         });
@@ -219,7 +222,6 @@
         });
         
         window.addEventListener('load', moveVideo);
-        // Fallback for initial render
         setTimeout(moveVideo, 1000);
       });
     </script>
