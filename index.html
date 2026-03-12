@@ -26,41 +26,46 @@
     <meta name="twitter:image" content="/assets/intro-poster-new-BU7qGwfU.jpg">
   
     <style>
-      /* Base optimizations */
+      /* --- GLOBAL STYLES & OPTIMIZATIONS --- */
+      :root {
+        --ivory-primary: #fdfbf7;
+        --gold-primary: #d4af37;
+        --text-main: #333333;
+        --text-secondary: #666666;
+      }
+
       html, body {
         scroll-behavior: smooth;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        background-color: #fdfbf7;
+        background-color: var(--ivory-primary);
         margin: 0;
         padding: 0;
         width: 100%;
         overflow-x: hidden;
+        color: var(--text-main);
+        font-family: serif; /* Better fallback for wedding theme */
       }
 
       body {
         opacity: 0;
-        transition: opacity 0.5s ease-in-out;
+        transition: opacity 1s ease-in-out;
       }
 
       body.loaded {
         opacity: 1;
       }
 
-      /* Hide language switcher and branding */
+      /* --- CLEANUP --- */
       [class*="LanguageProvider"],
       [class*="language-switcher"],
       .fixed.top-4.right-4, 
-      .absolute.top-4.right-4 {
-        display: none !important;
-      }
-
-      /* Remove the white spotlight glow */
+      .absolute.top-4.right-4,
       div[class*="blur-"][class*="xl"] {
         display: none !important;
       }
 
-      /* Hero Video Background */
+      /* --- HERO VIDEO --- */
       #hero-video {
         position: absolute;
         top: 0;
@@ -69,18 +74,21 @@
         height: 100%;
         z-index: 0;
         object-fit: cover;
-        filter: brightness(0.8) saturate(1.1);
+        filter: brightness(0.75) saturate(1.1); /* Slightly darker for better text contrast */
         pointer-events: none;
       }
 
-      /* Section transparency for Hero */
       .hero-active {
         background-color: transparent !important;
         position: relative;
         z-index: 1;
+        min-height: 100vh;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
       }
 
-      /* Aggressive fix for layout gaps and squashed images */
+      /* --- LAYOUT & SPACING --- */
       #root, #root > div {
         display: flex !important;
         flex-direction: column !important;
@@ -89,19 +97,26 @@
         padding: 0 !important;
       }
 
-      section, [class*="min-h-screen"], [class*="h-screen"], [class*="h-["] {
+      section, [class*="min-h-screen"] {
         width: 100% !important;
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 80px 0 !important; /* Consistent section padding */
         position: relative !important;
-        display: block !important;
-        overflow: hidden !important;
+        box-sizing: border-box;
       }
 
-      /* Ensure images fill their containers without gaps or squashing */
+      /* Reset padding for full-height sections */
+      [class*="h-screen"], [class*="min-h-screen"]:first-of-type {
+        padding: 0 !important;
+      }
+
+      /* --- IMAGE OPTIMIZATION --- */
       img {
         display: block !important;
         max-width: 100% !important;
+        height: auto;
+        margin: 0 auto;
+        transition: transform 0.5s ease;
       }
 
       [class*="h-screen"] img, 
@@ -111,12 +126,29 @@
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        display: block !important;
       }
 
-      /* Fix for specific illustration gaps */
+      /* --- VISUAL POLISH --- */
+      h1, h2, h3, .font-serif {
+        letter-spacing: 0.05em;
+        line-height: 1.4;
+      }
+
       [class*="bg-ivory"], [class*="bg-background"] {
-        background-color: #fdfbf7 !important;
+        background-color: var(--ivory-primary) !important;
+      }
+
+      /* Interactive feel */
+      a, button {
+        transition: all 0.3s ease;
+      }
+
+      /* Better typography for timeline and info */
+      p {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.8;
       }
     </style>
     <script>
@@ -144,19 +176,19 @@
         };
         updateHead();
 
-        // 2. Dynamic Text Injection with Recursive DOM Walker
+        // 2. Advanced Dynamic Text Injection
         const injectDynamicText = () => {
           const walk = (node) => {
             if (node.nodeType === 3) { // Text node
               let text = node.nodeValue;
               let changed = false;
 
-              // Replace Full Hero Title if found exactly
+              // Priority 1: Exact Hero Title Match
               if (config.heroTitle && text.trim() === "Andrea & Pedro") {
                 text = config.heroTitle;
                 changed = true;
               } else {
-                // Otherwise replace individual parts
+                // Priority 2: Pattern Replacements
                 if (config.brideName && text.includes('Andrea')) {
                   text = text.replace(/Andrea/g, config.brideName);
                   changed = true;
@@ -165,16 +197,18 @@
                   text = text.replace(/Pedro/g, config.groomName);
                   changed = true;
                 }
-              }
-              
-              // Replace Dates & Venue
-              if (config.weddingDate && text.includes('12 September 2026')) {
-                text = text.replace(/12 September 2026/g, config.weddingDate);
-                changed = true;
-              }
-              if (config.venueName && text.includes('Hedsor House')) {
-                text = text.replace(/Hedsor House/g, config.venueName);
-                changed = true;
+                if (config.weddingDate && text.includes('12 September 2026')) {
+                  text = text.replace(/12 September 2026/g, config.weddingDate);
+                  changed = true;
+                }
+                if (config.venueName && text.includes('Hedsor House')) {
+                  text = text.replace(/Hedsor House/g, config.venueName);
+                  changed = true;
+                }
+                if (config.heroSubtitle && text.trim() === "WE'RE GETTING MARRIED") {
+                  text = config.heroSubtitle;
+                  changed = true;
+                }
               }
 
               if (changed) {
@@ -193,7 +227,7 @@
           if (root) walk(root);
         };
 
-        // 3. Move Hero Video & Run Injection
+        // 3. Move Hero Video & Section Detection
         const moveVideo = () => {
           const video = document.getElementById('hero-video');
           const sections = document.querySelectorAll('#root section, #root [class*="min-h-screen"]');
@@ -201,7 +235,6 @@
             const hero = sections[0];
             if (video && !hero.contains(video)) {
               hero.classList.add('hero-active');
-              hero.style.position = 'relative';
               hero.insertBefore(video, hero.firstChild);
               video.style.display = 'block';
               video.play().catch(() => {});
@@ -211,10 +244,7 @@
         };
 
         document.body.classList.add('loaded');
-        const observer = new MutationObserver((mutations) => {
-          moveVideo();
-        });
-        
+        const observer = new MutationObserver(moveVideo);
         observer.observe(document.body, { 
           childList: true, 
           subtree: true,
@@ -222,7 +252,7 @@
         });
         
         window.addEventListener('load', moveVideo);
-        setTimeout(moveVideo, 1000);
+        setTimeout(moveVideo, 800);
       });
     </script>
     <script type="module" crossorigin src="/assets/index-CvER8GyV.js"></script>
