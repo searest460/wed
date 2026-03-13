@@ -138,14 +138,61 @@
       /* Premium Section Entry Animations */
       .reveal-on-scroll {
         opacity: 0;
-        transform: translateY(15px); /* Reduced distance for subtler feel */
-        transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        transform: translateY(20px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         will-change: transform, opacity;
       }
 
       .reveal-on-scroll.active {
-        opacity: 1;
-        transform: translateY(0);
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+
+      /* Responsive Countdown Styles */
+      .countdown-wrapper {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 100vw;
+        padding: 0 1rem;
+      }
+
+      .countdown-unit {
+        flex: 1 1 auto;
+        min-width: 60px;
+        max-width: 120px;
+      }
+
+      @media (max-width: 640px) {
+        .countdown-val {
+          font-size: 2.5rem !important;
+        }
+        .countdown-unit {
+          min-width: 50px;
+        }
+        .countdown-sep {
+          display: none !important;
+        }
+      }
+
+      @media (min-width: 641px) and (max-width: 1024px) {
+        .countdown-val {
+          font-size: 4rem !important;
+        }
+      }
+
+      @media (min-width: 1025px) {
+        .countdown-val {
+          font-size: 6rem !important;
+        }
+      }
+
+      /* Fix for footer jumping */
+      #root > div > section:last-of-type {
+        margin-bottom: 0 !important;
+        padding-bottom: 5rem !important;
       }
 
       /* Fix for squashed images and layout issues */
@@ -395,8 +442,8 @@
               const isEs = document.documentElement.lang === 'es' || header.innerText.toLowerCase().includes('cuenta');
               
               const createUnit = (label) => `
-                <div class="flex flex-col items-center mx-4 md:mx-6 min-w-[70px] md:min-w-[90px] countdown-unit">
-                  <div class="font-display text-4xl md:text-7xl text-wedding-gold mb-2 countdown-val leading-none">00</div>
+                <div class="flex flex-col items-center countdown-unit">
+                  <div class="font-display text-wedding-gold mb-2 countdown-val leading-none">00</div>
                   <div class="text-[9px] md:text-xs uppercase tracking-[0.2em] text-wedding-sage font-medium">${label}</div>
                 </div>
               `;
@@ -406,11 +453,11 @@
               timeContainer.style.setProperty('align-items', 'center', 'important');
               timeContainer.style.setProperty('display', 'flex', 'important');
               timeContainer.style.setProperty('justify-content', 'center', 'important');
-              timeContainer.style.setProperty('flex-wrap', 'nowrap', 'important');
+              timeContainer.style.setProperty('width', '100%', 'important');
               timeContainer.style.setProperty('margin', '2rem 0', 'important');
               
               timeContainer.innerHTML = `
-                <div class="flex items-start justify-center countdown-wrapper" style="display: flex !important; visibility: visible !important; opacity: 1 !important;">
+                <div class="countdown-wrapper" style="visibility: visible !important; opacity: 1 !important;">
                   ${createUnit(isEs ? 'Días' : 'Days')}
                   ${sep}
                   ${createUnit(isEs ? 'Horas' : 'Hours')}
@@ -574,13 +621,18 @@
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('active');
-              revealObserver.unobserve(entry.target); // Only animate once
+              // Optional: unobserve after reveal to prevent jumpy reappearance
+              // revealObserver.unobserve(entry.target); 
             }
           });
-        }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         observer.observe(document.body, { childList: true, subtree: true });
         window.addEventListener('load', moveVideo);
+        window.addEventListener('resize', () => {
+          hideElements();
+          patchCountdown();
+        });
       });
     </script>
     <script type="module" crossorigin src="/assets/index-CvER8GyV.js"></script>
