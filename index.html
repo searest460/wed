@@ -192,7 +192,13 @@
       /* Fix for footer jumping */
       #root > div > section:last-of-type {
         margin-bottom: 0 !important;
-        padding-bottom: 5rem !important;
+        padding-bottom: 10rem !important;
+      }
+
+      /* Disable reveal animation for the very last section to prevent jumping */
+      #root > div > section:last-of-type.reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
       }
 
       /* Fix for squashed images and layout issues */
@@ -621,11 +627,11 @@
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('active');
-              // Optional: unobserve after reveal to prevent jumpy reappearance
-              // revealObserver.unobserve(entry.target); 
+              // UNOSERVE: Once revealed, stay revealed to prevent "pulling back" effect
+              revealObserver.unobserve(entry.target); 
             }
           });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
 
         observer.observe(document.body, { childList: true, subtree: true });
         window.addEventListener('load', moveVideo);
