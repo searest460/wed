@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { MessageSquare, Send } from 'lucide-react';
 
 export const WishesWall = () => {
@@ -10,7 +9,7 @@ export const WishesWall = () => {
     { name: 'Elena', message: 'So happy for both of you! Ronda is going to be magical.' },
   ]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (newWish.name && newWish.message) {
       setWishes([newWish, ...wishes]);
@@ -41,7 +40,7 @@ export const WishesWall = () => {
                   type="text" 
                   className="w-full p-3 bg-wedding-ivory border border-wedding-gold/20 rounded focus:outline-none focus:border-wedding-gold transition-colors"
                   value={newWish.name}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewWish({ ...newWish, name: e.target.value })}
+                  onChange={(e: any) => setNewWish({ ...newWish, name: e.target.value })}
                   placeholder="Enter your name"
                 />
               </div>
@@ -50,7 +49,7 @@ export const WishesWall = () => {
                 <textarea 
                   className="w-full p-3 bg-wedding-ivory border border-wedding-gold/20 rounded focus:outline-none focus:border-wedding-gold transition-colors h-32 resize-none"
                   value={newWish.message}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewWish({ ...newWish, message: e.target.value })}
+                  onChange={(e: any) => setNewWish({ ...newWish, message: e.target.value })}
                   placeholder="Write your wishes here..."
                 />
               </div>
@@ -66,7 +65,7 @@ export const WishesWall = () => {
 
           {/* Wall */}
           <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-            {wishes.map((wish: { name: string, message: string }, index: number) => (
+            {wishes.map((wish: any, index: number) => (
               <div key={index} className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-wedding-gold">
                 <p className="text-wedding-carbon italic mb-4">"{wish.message}"</p>
                 <p className="text-wedding-gold font-medium text-sm">— {wish.name}</p>

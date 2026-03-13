@@ -4,6 +4,7 @@ import { InvitationCard } from "@/components/wedding/InvitationCard";
 import { CountdownTimer } from "@/components/wedding/CountdownTimer";
 import { CoupleSection } from "@/components/wedding/CoupleSection";
 import { ProgramTimeline } from "@/components/wedding/ProgramTimeline";
+import { DressCode } from "@/components/wedding/DressCode";
 import { RSVPForm } from "@/components/wedding/RSVPForm";
 import { WishesWall } from "@/components/wedding/WishesWall";
 import { FAQSection } from "@/components/wedding/FAQSection";
@@ -27,6 +28,7 @@ const Index = () => {
           <CoupleSection />
           <CountdownTimer />
           <ProgramTimeline />
+          <DressCode />
           <RSVPForm />
           <WishesWall />
           <FAQSection />

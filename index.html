@@ -328,6 +328,13 @@
              return;
           }
 
+          // DO NOT hide the dress code section
+          if (text.includes('dress') || text.includes('vestimenta') || text.includes('código')) {
+             section.style.setProperty('display', 'block', 'important');
+             section.style.setProperty('visibility', 'visible', 'important');
+             return;
+          }
+
           if (text.includes('gift') || text.includes('regalo')) {
              section.style.display = 'none';
           }
@@ -374,13 +381,13 @@
               const isEs = document.documentElement.lang === 'es' || header.innerText.toLowerCase().includes('cuenta');
               
               const createUnit = (label) => `
-                <div class="flex flex-col items-center mx-4 md:mx-6 min-w-[70px] md:min-w-[90px]">
+                <div class="flex flex-col items-center mx-4 md:mx-6 min-w-[70px] md:min-w-[90px] countdown-unit">
                   <div class="font-display text-4xl md:text-7xl text-wedding-gold mb-2 countdown-val leading-none">00</div>
                   <div class="text-[9px] md:text-xs uppercase tracking-[0.2em] text-wedding-sage font-medium">${label}</div>
                 </div>
               `;
               
-              const sep = `<div class="text-wedding-gold text-2xl md:text-4xl self-start pt-1 mx-1 opacity-20">|</div>`;
+              const sep = `<div class="text-wedding-gold text-2xl md:text-4xl self-start pt-1 mx-1 opacity-20 countdown-sep">|</div>`;
               
               timeContainer.style.setProperty('align-items', 'center', 'important');
               timeContainer.style.setProperty('display', 'flex', 'important');
@@ -389,7 +396,7 @@
               timeContainer.style.setProperty('margin', '2rem 0', 'important');
               
               timeContainer.innerHTML = `
-                <div class="flex items-start justify-center">
+                <div class="flex items-start justify-center countdown-wrapper" style="display: flex !important; visibility: visible !important; opacity: 1 !important;">
                   ${createUnit(isEs ? 'Días' : 'Days')}
                   ${sep}
                   ${createUnit(isEs ? 'Horas' : 'Hours')}
@@ -401,6 +408,7 @@
               `;
 
               const valElements = timeContainer.querySelectorAll('.countdown-val');
+              console.log('Countdown elements found:', valElements.length);
               
               const update = () => {
                 const now = new Date().getTime();
