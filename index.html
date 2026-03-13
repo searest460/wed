@@ -278,6 +278,7 @@
         // Fix the large gap between Countdown and Day Programme
         const countdownHeader = Array.from(document.querySelectorAll('h2')).find(h => h.innerText.toLowerCase().includes('count') || h.innerText.toLowerCase().includes('cuenta'));
         const programHeader = Array.from(document.querySelectorAll('h2')).find(h => h.innerText.toLowerCase().includes('program') || h.innerText.toLowerCase().includes('día'));
+        const preWeddingHeader = Array.from(document.querySelectorAll('h2, h3, p')).find(h => h.innerText.toLowerCase().includes('pre-wedding') || h.innerText.toLowerCase().includes('say hello') || h.innerText.toLowerCase().includes('saludar'));
         
         if (countdownHeader && programHeader) {
            const countdownSection = countdownHeader.closest('section');
@@ -290,6 +291,25 @@
               let next = countdownSection.nextElementSibling;
               while (next && next !== programSection) {
                  next.style.setProperty('display', 'none', 'important');
+                 next = next.nextElementSibling;
+              }
+           }
+        }
+
+        if (programHeader && preWeddingHeader) {
+           const programSection = programHeader.closest('section');
+           const preWeddingSection = preWeddingHeader.closest('section');
+           if (programSection && preWeddingSection) {
+              programSection.style.setProperty('padding-bottom', '0px', 'important');
+              preWeddingSection.style.setProperty('padding-top', '0px', 'important');
+              preWeddingSection.style.setProperty('margin-top', '0px', 'important');
+              
+              // Find any elements between them and hide them
+              let next = programSection.nextElementSibling;
+              while (next && next !== preWeddingSection) {
+                 next.style.setProperty('display', 'none', 'important');
+                 next.style.setProperty('height', '0', 'important');
+                 next.style.setProperty('padding', '0', 'important');
                  next = next.nextElementSibling;
               }
            }
@@ -314,6 +334,10 @@
           // Also check for the venue section
           if (text.includes('venue') || text.includes('ubicación') || text.includes('donde')) {
              section.style.display = 'none';
+          }
+          // Also hide Dress Code section
+          if (text.includes('dress') || text.includes('vestimenta') || text.includes('código')) {
+             section.style.setProperty('display', 'none', 'important');
           }
           // Also check for mansion banner and bow
           const images = section.querySelectorAll('img');

@@ -28,7 +28,6 @@ const Index = () => {
           <CoupleSection />
           <CountdownTimer />
           <ProgramTimeline />
-          <DressCode />
           <RSVPForm />
           <WishesWall />
           <FAQSection />
