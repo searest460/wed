@@ -13,7 +13,7 @@ export const RSVPForm = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log('RSVP Submitted:', formData);
     // Add submission logic here
@@ -43,7 +43,7 @@ export const RSVPForm = () => {
                 className="w-full p-3 bg-white border border-wedding-gold/20 rounded focus:outline-none focus:border-wedding-gold transition-colors"
                 placeholder={t('rsvp.enterName')}
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                onChange={(e: any) => setFormData({...formData, name: e.target.value})}
               />
             </div>
             
@@ -57,7 +57,7 @@ export const RSVPForm = () => {
                 className="w-full p-3 bg-white border border-wedding-gold/20 rounded focus:outline-none focus:border-wedding-gold transition-colors"
                 placeholder="email@example.com"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e: any) => setFormData({...formData, email: e.target.value})}
               />
             </div>
           </div>
@@ -73,7 +73,7 @@ export const RSVPForm = () => {
                   name="attending" 
                   value="yes"
                   checked={formData.attending === 'yes'}
-                  onChange={(e) => setFormData({...formData, attending: e.target.value})}
+                  onChange={(e: any) => setFormData({...formData, attending: e.target.value})}
                   className="accent-wedding-gold"
                 />
                 <span className="text-wedding-carbon/80">{t('rsvp.yes')}</span>
@@ -84,7 +84,7 @@ export const RSVPForm = () => {
                   name="attending" 
                   value="no"
                   checked={formData.attending === 'no'}
-                  onChange={(e) => setFormData({...formData, attending: e.target.value})}
+                  onChange={(e: any) => setFormData({...formData, attending: e.target.value})}
                   className="accent-wedding-gold"
                 />
                 <span className="text-wedding-carbon/80">{t('rsvp.no')}</span>
@@ -100,7 +100,7 @@ export const RSVPForm = () => {
               className="w-full p-3 bg-white border border-wedding-gold/20 rounded focus:outline-none focus:border-wedding-gold transition-colors h-24 resize-none"
               placeholder="e.g. Vegetarian, Gluten-free, etc."
               value={formData.dietary}
-              onChange={(e) => setFormData({...formData, dietary: e.target.value})}
+              onChange={(e: any) => setFormData({...formData, dietary: e.target.value})}
             />
           </div>
           
@@ -112,7 +112,7 @@ export const RSVPForm = () => {
               className="w-full p-3 bg-white border border-wedding-gold/20 rounded focus:outline-none focus:border-wedding-gold transition-colors h-32 resize-none"
               placeholder="Any message for us?"
               value={formData.message}
-              onChange={(e) => setFormData({...formData, message: e.target.value})}
+              onChange={(e: any) => setFormData({...formData, message: e.target.value})}
             />
           </div>
           
