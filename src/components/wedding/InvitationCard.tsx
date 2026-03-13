@@ -1,7 +1,44 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { ChevronDown } from 'lucide-react';
 
-export const InvitationCard = () => (
-  <div className='p-4 border-2 border-dashed border-gray-300 rounded-lg m-2 text-center'>
-    Component: InvitationCard
-  </div>
-);
+export const InvitationCard = () => {
+  const { t } = useTranslation();
+
+  return (
+    <section className="relative h-screen w-full flex flex-col items-center justify-center text-white text-center overflow-hidden">
+      {/* Background overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-black/30 z-10" />
+      
+      {/* Content */}
+      <div className="relative z-20 flex flex-col items-center max-w-4xl px-6">
+        <h2 className="text-sm md:text-base uppercase tracking-[0.3em] mb-8 font-light">
+          {t('hero.subtitle')}
+        </h2>
+        
+        <h1 className="font-display text-7xl md:text-9xl mb-4 text-white drop-shadow-lg">
+          Andrea
+        </h1>
+        <span className="font-display text-4xl md:text-5xl mb-4 italic opacity-80">&</span>
+        <h1 className="font-display text-7xl md:text-9xl mb-12 text-white drop-shadow-lg">
+          Pedro
+        </h1>
+        
+        <div className="flex items-center space-x-4 mb-16">
+          <div className="h-[1px] w-8 md:w-12 bg-white/50" />
+          <span className="text-lg md:text-2xl font-light tracking-widest uppercase">
+            {t('hero.date')}
+          </span>
+          <div className="h-[1px] w-8 md:w-12 bg-white/50" />
+        </div>
+        
+        <div className="flex flex-col items-center cursor-pointer group">
+          <span className="text-sm uppercase tracking-widest mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
+            {t('hero.rsvp')}
+          </span>
+          <ChevronDown className="w-6 h-6 animate-bounce opacity-80 group-hover:opacity-100" />
+        </div>
+      </div>
+    </section>
+  );
+};
