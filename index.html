@@ -61,7 +61,10 @@
       [class*="floating-widget"],
       .fixed.top-1\/2.right-4,
       .absolute.top-1\/2.right-4,
-      .fixed.top-1\/2.-translate-y-1\/2.right-5 {
+      .fixed.top-1\/2.-translate-y-1\/2.right-5,
+      [class*="fixed"][class*="right-"],
+      [style*="z-index: 9999"],
+      [style*="z-index: 2147483647"] {
         display: none !important;
       }
 
@@ -132,7 +135,27 @@
       }
     </style>
     <script>
+      // Force hide any persistent elements that might be the question mark
+      const hideElements = () => {
+        const selectors = [
+          '[class*="LanguageProvider"]',
+          '[class*="language-switcher"]',
+          '[class*="floating-widget"]',
+          '.fixed.top-1\\/2.right-4',
+          '.absolute.top-1\\/2.right-4',
+          '[style*="z-index: 9999"]',
+          '[style*="z-index: 2147483647"]',
+          'iframe[src*="google.com"]'
+        ];
+        selectors.forEach(s => {
+          document.querySelectorAll(s).forEach(el => {
+            el.style.setProperty('display', 'none', 'important');
+          });
+        });
+      };
+
       document.addEventListener('DOMContentLoaded', () => {
+        hideElements();
         // Fade in body
         setTimeout(() => document.body.classList.add('loaded'), 50);
 
@@ -159,6 +182,7 @@
 
         // MutationObserver for React mount
         const observer = new MutationObserver((mutations) => {
+          hideElements();
           moveVideo();
           
           // Add reveal classes to sections (skipping hero)
