@@ -76,6 +76,9 @@
       /* Hide any champagne tower related items */
       img[src*="champagne"],
       [style*="champagne"],
+      /* Hide specific mansion and bow portion */
+      img[src*="venue-hedsor-front"],
+      img[src*="bow-illustration"],
       /* Hide the specific question mark box reported by user */
       .tp-caption {
         display: none !important;
@@ -165,7 +168,9 @@
           'iframe[src*="google.com"]',
           '[src*="champagne"]',
           '.tp-caption',
-          '.tp-caption img'
+          '.tp-caption img',
+          'img[src*="venue-hedsor-front"]',
+          'img[src*="bow-illustration"]'
         ];
         selectors.forEach(s => {
           document.querySelectorAll(s).forEach(el => {
@@ -180,6 +185,17 @@
           if (header && (header.innerText.toLowerCase().includes('gift') || header.innerText.toLowerCase().includes('regalo'))) {
              section.style.display = 'none';
           }
+          // Also check for the venue section
+          if (header && (header.innerText.toLowerCase().includes('venue') || header.innerText.toLowerCase().includes('ubicación') || header.innerText.toLowerCase().includes('donde'))) {
+             section.style.display = 'none';
+          }
+          // Also check for mansion banner and bow
+          const images = section.querySelectorAll('img');
+          images.forEach(img => {
+            if (img.src.includes('venue-hedsor-front') || img.src.includes('bow-illustration')) {
+               section.style.display = 'none';
+            }
+          });
           // Also check for the gift icon SVG which might be easier to target
           const giftIcon = section.querySelector('.lucide-gift');
           if (giftIcon) {
