@@ -6,7 +6,6 @@ import { CoupleSection } from "@/components/wedding/CoupleSection";
 import { VenueSection } from "@/components/wedding/VenueSection";
 import { ProgramTimeline } from "@/components/wedding/ProgramTimeline";
 import { DressCode } from "@/components/wedding/DressCode";
-import { GiftsSection } from "@/components/wedding/GiftsSection";
 import { RSVPForm } from "@/components/wedding/RSVPForm";
 import { WishesWall } from "@/components/wedding/WishesWall";
 import { FAQSection } from "@/components/wedding/FAQSection";
@@ -32,7 +31,6 @@ const Index = () => {
           <ProgramTimeline />
           <DressCode />
           <VenueSection />
-          <GiftsSection />
           <RSVPForm />
           <WishesWall />
           <FAQSection />

@@ -152,6 +152,20 @@
             el.style.setProperty('display', 'none', 'important');
           });
         });
+        
+        // Hide Gift Section in Production
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+          const header = section.querySelector('h2');
+          if (header && (header.innerText.toLowerCase().includes('gift') || header.innerText.toLowerCase().includes('regalo'))) {
+             section.style.display = 'none';
+          }
+          // Also check for the gift icon SVG which might be easier to target
+          const giftIcon = section.querySelector('.lucide-gift');
+          if (giftIcon) {
+            section.style.display = 'none';
+          }
+        });
       };
 
       // Patch countdown timer to show seconds
