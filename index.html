@@ -154,6 +154,92 @@
         });
       };
 
+      // Patch countdown timer to show seconds
+      const patchCountdown = () => {
+        // Find all sections that look like a countdown
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+          // Check if it's the countdown section by checking text or headers
+          const header = section.querySelector('h2');
+          if (header && (header.innerText.toLowerCase().includes('count') || header.innerText.toLowerCase().includes('cuenta'))) {
+            // Find the time display container
+            const timeContainer = section.querySelector('.flex.items-center.justify-center');
+            if (timeContainer) {
+              // Check if seconds are already there
+              const labels = Array.from(timeContainer.querySelectorAll('div[class*="text-[10px]"]'));
+              const hasSeconds = labels.some(l => l.innerText.toLowerCase().includes('second') || l.innerText.toLowerCase().includes('segundo'));
+              
+              if (!hasSeconds) {
+                // Target date: 12 September 2026
+                const targetDate = new Date('2026-09-12T00:00:00').getTime();
+                
+                // Function to update the countdown
+                const updateDisplay = () => {
+                  const now = new Date().getTime();
+                  const diff = targetDate - now;
+                  
+                  if (diff <= 0) return;
+                  
+                  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                  const secs = Math.floor((diff % (1000 * 60)) / 1000);
+                  
+                  // Clear and rebuild or update
+                  // Since we want to be safe, let's just ensure 4 units exist
+                  const units = timeContainer.querySelectorAll('.flex-col.items-center');
+                  const separators = timeContainer.querySelectorAll('.text-wedding-gold.text-2xl');
+                  
+                  if (units.length >= 3) {
+                    // Update existing
+                    const setVal = (idx, val) => {
+                      const valEl = units[idx].querySelector('div[class*="text-3xl"]');
+                      if (valEl) valEl.innerText = val.toString().padStart(2, '0');
+                    };
+                    
+                    setVal(0, days);
+                    setVal(1, hours);
+                    setVal(2, mins);
+                    
+                    // Add seconds if missing
+                    if (units.length === 3) {
+                      // Add separator
+                      const sep = document.createElement('div');
+                      sep.className = 'text-wedding-gold text-2xl pb-6 mx-1 md:mx-2';
+                      sep.innerText = ':';
+                      timeContainer.appendChild(sep);
+                      
+                      // Add seconds unit
+                      const secUnit = document.createElement('div');
+                      secUnit.className = 'flex flex-col items-center mx-2 md:mx-4';
+                      
+                      const secVal = document.createElement('div');
+                      secVal.className = 'text-3xl md:text-5xl font-light text-wedding-gold mb-1';
+                      secVal.innerText = secs.toString().padStart(2, '0');
+                      secUnit.appendChild(secVal);
+                      
+                      const secLabel = document.createElement('div');
+                      secLabel.className = 'text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage';
+                      // Use language detection
+                      const isEs = document.documentElement.lang === 'es' || header.innerText.toLowerCase().includes('cuenta');
+                      secLabel.innerText = isEs ? 'Segundos' : 'Seconds';
+                      secUnit.appendChild(secLabel);
+                      
+                      timeContainer.appendChild(secUnit);
+                    } else if (units.length === 4) {
+                      setVal(3, secs);
+                    }
+                  }
+                };
+                
+                updateDisplay();
+                setInterval(updateDisplay, 1000);
+              }
+            }
+          }
+        });
+      };
+
       document.addEventListener('DOMContentLoaded', () => {
         hideElements();
         // Fade in body
@@ -184,6 +270,7 @@
         const observer = new MutationObserver((mutations) => {
           hideElements();
           moveVideo();
+          patchCountdown();
           
           // Add reveal classes to sections (skipping hero)
           const sections = document.querySelectorAll('#root section, #root > div > div:not([class*="fixed"])');
