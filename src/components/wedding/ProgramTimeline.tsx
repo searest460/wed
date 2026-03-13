@@ -11,7 +11,6 @@ export const ProgramTimeline = () => {
     { time: '19:00', title: t('program.cocktails'), icon: GlassWater },
     { time: '21:00', title: t('program.dinner'), icon: Utensils },
     { time: '23:30', title: t('program.cake'), icon: Cake },
-    { time: '00:00', title: t('program.finish'), icon: PartyPopper },
   ];
 
   return (

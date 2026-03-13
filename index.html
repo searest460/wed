@@ -72,7 +72,12 @@
       img:not([src]), 
       img[src$="undefined"],
       img[src$="null"],
-      .tp-caption img {
+      .tp-caption img,
+      /* Hide any champagne tower related items */
+      img[src*="champagne"],
+      [style*="champagne"],
+      /* Hide the specific question mark box reported by user */
+      .tp-caption {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
@@ -157,7 +162,10 @@
           '.absolute.top-1\\/2.right-4',
           '[style*="z-index: 9999"]',
           '[style*="z-index: 2147483647"]',
-          'iframe[src*="google.com"]'
+          'iframe[src*="google.com"]',
+          '[src*="champagne"]',
+          '.tp-caption',
+          '.tp-caption img'
         ];
         selectors.forEach(s => {
           document.querySelectorAll(s).forEach(el => {
