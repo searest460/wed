@@ -64,8 +64,20 @@
       .fixed.top-1\/2.-translate-y-1\/2.right-5,
       [class*="fixed"][class*="right-"],
       [style*="z-index: 9999"],
-      [style*="z-index: 2147483647"] {
+      [style*="z-index: 2147483647"],
+      [style*="position: fixed"][style*="right:"],
+      [style*="position: absolute"][style*="right:"],
+      /* Aggressive iOS question mark fix */
+      img[src=""], 
+      img:not([src]), 
+      img[src$="undefined"],
+      img[src$="null"],
+      .tp-caption img {
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
       }
 
       /* Hero Video Background */
@@ -189,7 +201,7 @@
               
               const createUnit = (label) => `
                 <div class="flex flex-col items-center mx-2 md:mx-4">
-                  <div class="text-3xl md:text-5xl font-light text-wedding-gold mb-1 countdown-val">00</div>
+                  <div class="font-display text-4xl md:text-6xl text-wedding-gold mb-1 countdown-val">00</div>
                   <div class="text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage">${label}</div>
                 </div>
               `;
@@ -262,6 +274,16 @@
           hideElements();
           moveVideo();
           patchCountdown();
+          
+          // Additional iOS check for broken images
+          document.querySelectorAll('img').forEach(img => {
+            if (!img.complete || img.naturalWidth === 0) {
+              // Only hide if it's truly broken, not just loading
+              if (img.src === window.location.href || img.src.includes('undefined')) {
+                img.style.display = 'none';
+              }
+            }
+          });
           
           // Add reveal classes to sections (skipping hero)
           const sections = document.querySelectorAll('#root section, #root > div > div:not([class*="fixed"])');
