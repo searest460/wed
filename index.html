@@ -522,6 +522,41 @@
               revealObserver.observe(section);
             }
           });
+
+          // Interchange misplaced Teacup and Sunday Lunch images
+          document.querySelectorAll('img').forEach(img => {
+            if (img.src.includes('teacup-illustration') && !img.dataset.swapped) {
+               // This is currently in Farewell Brunch, move it to Welcome Drinks
+               const parent = img.closest('div');
+               const section = img.closest('section');
+               if (section && section.innerText.toLowerCase().includes('welcome')) {
+                  // Already correct or needs check
+               }
+            }
+          });
+
+          // More reliable swap by targeting the cards
+          const eventCards = document.querySelectorAll('.bg-white.p-8.rounded-lg, .bg-white.p-10.rounded-xl, div[class*="bg-white"]');
+          let welcomeCard, farewellCard;
+          
+          eventCards.forEach(card => {
+             const text = card.innerText.toLowerCase();
+             if (text.includes('welcome drinks') || text.includes('bienvenida')) welcomeCard = card;
+             if (text.includes('farewell brunch') || text.includes('sunday lunch') || text.includes('despedida')) farewellCard = card;
+          });
+
+          if (welcomeCard && farewellCard) {
+             const welcomeImg = welcomeCard.querySelector('img');
+             const farewellImg = farewellCard.querySelector('img');
+             
+             if (welcomeImg && farewellImg && !welcomeImg.dataset.swapped) {
+                const tempSrc = welcomeImg.src;
+                welcomeImg.src = farewellImg.src;
+                farewellImg.src = tempSrc;
+                welcomeImg.dataset.swapped = 'true';
+                farewellImg.dataset.swapped = 'true';
+             }
+          }
         });
 
         // IntersectionObserver for scroll animations
