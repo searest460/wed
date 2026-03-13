@@ -67,25 +67,40 @@
       [style*="z-index: 2147483647"],
       [style*="position: fixed"][style*="right:"],
       [style*="position: absolute"][style*="right:"],
-      /* Aggressive iOS question mark fix */
+      /* Aggressive iOS question mark fix (Ultra) */
       img[src=""], 
       img:not([src]), 
       img[src$="undefined"],
       img[src$="null"],
+      img[src*="placeholder"],
       .tp-caption img,
+      .tp-caption,
+      [class*="rev_slider"],
+      [class*="tp-banner"],
+      [class*="tp-bgimg"],
+      [class*="tp-loader"],
       /* Hide any champagne tower related items */
       img[src*="champagne"],
       [style*="champagne"],
       /* Hide specific mansion and bow portion */
       img[src*="venue-hedsor-front"],
-      img[src*="bow-illustration"],
-      /* Hide the specific question mark box reported by user */
-      .tp-caption {
+      img[src*="bow-illustration"] {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
         width: 0 !important;
         height: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+      }
+
+      /* Global hide for any element that might be the blue question mark */
+      i.fa-question, 
+      i.lucide-help-circle,
+      .question-mark,
+      .help-icon {
+        display: none !important;
       }
 
       /* Hero Video Background */
@@ -172,12 +187,31 @@
           'img[src*="venue-hedsor-front"]',
           'img[src*="bow-illustration"]',
           '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="venue-hedsor-front"])',
-          '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="bow-illustration"])'
+          '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="bow-illustration"])',
+          '[class*="rev_slider"]',
+          '[class*="tp-banner"]',
+          '[class*="tp-bgimg"]',
+          '[class*="tp-loader"]',
+          '.tp-caption',
+          '#rev_slider'
         ];
         selectors.forEach(s => {
           document.querySelectorAll(s).forEach(el => {
             el.style.setProperty('display', 'none', 'important');
+            el.style.setProperty('visibility', 'hidden', 'important');
+            el.style.setProperty('width', '0', 'important');
+            el.style.setProperty('height', '0', 'important');
           });
+        });
+
+        // Aggressively scan and hide broken images (iOS fix)
+        document.querySelectorAll('img').forEach(img => {
+          if (!img.src || img.src.includes('undefined') || img.src.includes('null') || img.src === window.location.href) {
+             img.style.setProperty('display', 'none', 'important');
+          }
+          img.onerror = () => {
+             img.style.setProperty('display', 'none', 'important');
+          };
         });
 
         // Specifically target and hide the mansion/bow sections more aggressively
@@ -320,6 +354,13 @@
       };
 
       document.addEventListener('DOMContentLoaded', () => {
+        // Global error listener to catch broken images immediately
+        window.addEventListener('error', (e) => {
+          if (e.target.tagName === 'IMG') {
+            e.target.style.setProperty('display', 'none', 'important');
+          }
+        }, true);
+
         hideElements();
         // Fade in body
         setTimeout(() => document.body.classList.add('loaded'), 50);
@@ -353,12 +394,23 @@
           
           // Additional iOS check for broken images
           document.querySelectorAll('img').forEach(img => {
-            if (!img.complete || img.naturalWidth === 0) {
-              // Only hide if it's truly broken, not just loading
-              if (img.src === window.location.href || img.src.includes('undefined')) {
-                img.style.display = 'none';
-              }
+            if (!img.src || img.src === window.location.href || img.src.includes('undefined') || img.src.includes('null')) {
+                img.style.setProperty('display', 'none', 'important');
             }
+            if (img.complete && img.naturalWidth === 0) {
+                img.style.setProperty('display', 'none', 'important');
+            }
+            img.onerror = () => {
+                img.style.setProperty('display', 'none', 'important');
+            };
+          });
+
+          // Also check for background-images that might be failing
+          document.querySelectorAll('*').forEach(el => {
+             const bg = window.getComputedStyle(el).backgroundImage;
+             if (bg && (bg.includes('undefined') || bg.includes('null'))) {
+                el.style.setProperty('background-image', 'none', 'important');
+             }
           });
           
           // Add reveal classes to sections (skipping hero)
