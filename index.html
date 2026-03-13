@@ -193,7 +193,10 @@
           '[class*="tp-bgimg"]',
           '[class*="tp-loader"]',
           '.tp-caption',
-          '#rev_slider'
+          '#rev_slider',
+          /* Hide the '00:00 FINISH' entry */
+          '.flex.items-center.group:has(div:contains("00:00"))',
+          '.flex.items-center.group:has(div:contains("FINISH"))'
         ];
         selectors.forEach(s => {
           document.querySelectorAll(s).forEach(el => {
@@ -203,6 +206,28 @@
             el.style.setProperty('height', '0', 'important');
           });
         });
+
+        // More aggressive approach for '00:00 FINISH'
+        const hideFinish = () => {
+          document.querySelectorAll('.flex.items-center.group, .grid.grid-cols-2, .relative.flex.items-center, section div div').forEach(el => {
+            const text = el.innerText.toUpperCase();
+            if (text.includes('00:00') && (text.includes('FINISH') || text.includes('FINAL') || text.includes('TERMINAR'))) {
+                // Find the container (usually a group or a grid row)
+                let container = el;
+                if (el.classList.contains('group') || el.classList.contains('grid')) {
+                  container = el;
+                } else {
+                  container = el.closest('.group') || el.closest('.grid') || el.closest('div[class*="items-center"]');
+                }
+                
+                if (container) {
+                  container.style.setProperty('display', 'none', 'important');
+                  container.style.setProperty('visibility', 'hidden', 'important');
+                }
+            }
+          });
+        };
+        hideFinish();
 
         // Aggressively scan and hide broken images (iOS fix)
         document.querySelectorAll('img').forEach(img => {
@@ -252,8 +277,8 @@
            const countdownSection = countdownHeader.closest('section');
            const programSection = programHeader.closest('section');
            if (countdownSection && programSection) {
-              countdownSection.style.setProperty('padding-bottom', '0px', 'important');
-              programSection.style.setProperty('padding-top', '20px', 'important');
+              countdownSection.style.setProperty('padding-bottom', '40px', 'important');
+              programSection.style.setProperty('padding-top', '40px', 'important');
               
               // Find any elements between them and hide them
               let next = countdownSection.nextElementSibling;
@@ -268,11 +293,20 @@
         const sections = document.querySelectorAll('section');
         sections.forEach(section => {
           const header = section.querySelector('h2');
-          if (header && (header.innerText.toLowerCase().includes('gift') || header.innerText.toLowerCase().includes('regalo'))) {
+          const text = header ? header.innerText.toLowerCase() : '';
+          
+          // DO NOT hide the welcome section
+          if (text.includes('welcome') || text.includes('bienvenidos')) {
+             section.style.setProperty('display', 'block', 'important');
+             section.style.setProperty('visibility', 'visible', 'important');
+             return;
+          }
+
+          if (text.includes('gift') || text.includes('regalo')) {
              section.style.display = 'none';
           }
           // Also check for the venue section
-          if (header && (header.innerText.toLowerCase().includes('venue') || header.innerText.toLowerCase().includes('ubicación') || header.innerText.toLowerCase().includes('donde'))) {
+          if (text.includes('venue') || text.includes('ubicación') || text.includes('donde')) {
              section.style.display = 'none';
           }
           // Also check for mansion banner and bow
@@ -310,22 +344,30 @@
               const isEs = document.documentElement.lang === 'es' || header.innerText.toLowerCase().includes('cuenta');
               
               const createUnit = (label) => `
-                <div class="flex flex-col items-center mx-2 md:mx-4">
-                  <div class="font-display text-4xl md:text-6xl text-wedding-gold mb-1 countdown-val">00</div>
-                  <div class="text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage">${label}</div>
+                <div class="flex flex-col items-center mx-4 md:mx-6 min-w-[70px] md:min-w-[90px]">
+                  <div class="font-display text-4xl md:text-7xl text-wedding-gold mb-2 countdown-val leading-none">00</div>
+                  <div class="text-[9px] md:text-xs uppercase tracking-[0.2em] text-wedding-sage font-medium">${label}</div>
                 </div>
               `;
               
-              const sep = `<div class="text-wedding-gold text-2xl pb-6 mx-1 md:mx-2 opacity-30">|</div>`;
+              const sep = `<div class="text-wedding-gold text-2xl md:text-4xl self-start pt-1 mx-1 opacity-20">|</div>`;
+              
+              timeContainer.style.setProperty('align-items', 'center', 'important');
+              timeContainer.style.setProperty('display', 'flex', 'important');
+              timeContainer.style.setProperty('justify-content', 'center', 'important');
+              timeContainer.style.setProperty('flex-wrap', 'nowrap', 'important');
+              timeContainer.style.setProperty('margin', '2rem 0', 'important');
               
               timeContainer.innerHTML = `
-                ${createUnit(isEs ? 'Días' : 'Days')}
-                ${sep}
-                ${createUnit(isEs ? 'Horas' : 'Hours')}
-                ${sep}
-                ${createUnit(isEs ? 'Minutos' : 'Minutes')}
-                ${sep}
-                ${createUnit(isEs ? 'Segundos' : 'Seconds')}
+                <div class="flex items-start justify-center">
+                  ${createUnit(isEs ? 'Días' : 'Days')}
+                  ${sep}
+                  ${createUnit(isEs ? 'Horas' : 'Hours')}
+                  ${sep}
+                  ${createUnit(isEs ? 'Minutos' : 'Minutes')}
+                  ${sep}
+                  ${createUnit(isEs ? 'Segundos' : 'Seconds')}
+                </div>
               `;
 
               const valElements = timeContainer.querySelectorAll('.countdown-val');
@@ -389,6 +431,7 @@
         // MutationObserver for React mount
         const observer = new MutationObserver((mutations) => {
           hideElements();
+          hideFinish();
           moveVideo();
           patchCountdown();
           
