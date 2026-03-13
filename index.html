@@ -41,7 +41,8 @@
       }
 
       body.loaded {
-        opacity: 1;
+        opacity: 1 !important;
+        visibility: visible !important;
       }
 
       /* Remove the white spotlight glow and language switcher */
@@ -186,58 +187,59 @@
           '.tp-caption img',
           'img[src*="venue-hedsor-front"]',
           'img[src*="bow-illustration"]',
-          '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="venue-hedsor-front"])',
-          '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="bow-illustration"])',
           '[class*="rev_slider"]',
           '[class*="tp-banner"]',
           '[class*="tp-bgimg"]',
           '[class*="tp-loader"]',
           '.tp-caption',
-          '#rev_slider',
-          /* Hide the '00:00 FINISH' entry */
-          '.flex.items-center.group:has(div:contains("00:00"))',
-          '.flex.items-center.group:has(div:contains("FINISH"))'
+          '#rev_slider'
         ];
         selectors.forEach(s => {
-          document.querySelectorAll(s).forEach(el => {
-            el.style.setProperty('display', 'none', 'important');
-            el.style.setProperty('visibility', 'hidden', 'important');
-            el.style.setProperty('width', '0', 'important');
-            el.style.setProperty('height', '0', 'important');
-          });
+          try {
+            document.querySelectorAll(s).forEach(el => {
+              el.style.setProperty('display', 'none', 'important');
+              el.style.setProperty('visibility', 'hidden', 'important');
+              el.style.setProperty('width', '0', 'important');
+              el.style.setProperty('height', '0', 'important');
+            });
+          } catch (e) {}
         });
 
         // More aggressive approach for '00:00 FINISH'
         const hideFinish = () => {
-          document.querySelectorAll('.flex.items-center.group, .grid.grid-cols-2, .relative.flex.items-center, section div div').forEach(el => {
-            const text = el.innerText.toUpperCase();
-            if (text.includes('00:00') && (text.includes('FINISH') || text.includes('FINAL') || text.includes('TERMINAR'))) {
-                // Find the container (usually a group or a grid row)
-                let container = el;
-                if (el.classList.contains('group') || el.classList.contains('grid')) {
-                  container = el;
-                } else {
-                  container = el.closest('.group') || el.closest('.grid') || el.closest('div[class*="items-center"]');
-                }
-                
-                if (container) {
-                  container.style.setProperty('display', 'none', 'important');
-                  container.style.setProperty('visibility', 'hidden', 'important');
-                }
-            }
-          });
+          try {
+            document.querySelectorAll('.flex.items-center.group, .grid.grid-cols-2, .relative.flex.items-center, section div div').forEach(el => {
+              const text = el.innerText.toUpperCase();
+              if (text.includes('00:00') && (text.includes('FINISH') || text.includes('FINAL') || text.includes('TERMINAR'))) {
+                  // Find the container (usually a group or a grid row)
+                  let container = el;
+                  if (el.classList.contains('group') || el.classList.contains('grid')) {
+                    container = el;
+                  } else {
+                    container = el.closest('.group') || el.closest('.grid') || el.closest('div[class*="items-center"]');
+                  }
+                  
+                  if (container) {
+                    container.style.setProperty('display', 'none', 'important');
+                    container.style.setProperty('visibility', 'hidden', 'important');
+                  }
+              }
+            });
+          } catch (e) {}
         };
         hideFinish();
 
         // Aggressively scan and hide broken images (iOS fix)
-        document.querySelectorAll('img').forEach(img => {
-          if (!img.src || img.src.includes('undefined') || img.src.includes('null') || img.src === window.location.href) {
-             img.style.setProperty('display', 'none', 'important');
-          }
-          img.onerror = () => {
-             img.style.setProperty('display', 'none', 'important');
-          };
-        });
+        try {
+          document.querySelectorAll('img').forEach(img => {
+            if (!img.src || img.src.includes('undefined') || img.src.includes('null') || img.src === window.location.href) {
+               img.style.setProperty('display', 'none', 'important');
+            }
+            img.onerror = () => {
+               img.style.setProperty('display', 'none', 'important');
+            };
+          });
+        } catch (e) {}
 
         // Specifically target and hide the mansion/bow sections more aggressively
         // These sections often have large padding that leaves a gap
@@ -398,14 +400,24 @@
       document.addEventListener('DOMContentLoaded', () => {
         // Global error listener to catch broken images immediately
         window.addEventListener('error', (e) => {
-          if (e.target.tagName === 'IMG') {
+          if (e.target && e.target.tagName === 'IMG') {
             e.target.style.setProperty('display', 'none', 'important');
           }
         }, true);
 
-        hideElements();
-        // Fade in body
-        setTimeout(() => document.body.classList.add('loaded'), 50);
+        try {
+          hideElements();
+        } catch (e) {
+          console.error('Error hiding elements:', e);
+        }
+
+        // Fade in body - ensure this runs even if scripts above fail
+        const showContent = () => {
+           document.body.classList.add('loaded');
+           document.body.style.opacity = '1';
+        };
+        setTimeout(showContent, 50);
+        window.addEventListener('load', showContent);
 
         const video = document.getElementById('hero-video');
         
