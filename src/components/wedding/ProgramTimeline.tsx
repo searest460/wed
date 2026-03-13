@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Clock, Music, GlassWater, Utensils, Cake, PartyPopper } from 'lucide-react';
+import { Clock, Music, GlassWater, Utensils, Cake } from 'lucide-react';
 
 export const ProgramTimeline = () => {
   const { t } = useTranslation();
