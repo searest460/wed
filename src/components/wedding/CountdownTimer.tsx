@@ -45,7 +45,7 @@ export const CountdownTimer = () => {
   );
 
   return (
-    <section className="py-16 bg-wedding-ivory flex flex-col items-center reveal-on-scroll">
+    <section className="pt-16 pb-0 bg-wedding-ivory flex flex-col items-center reveal-on-scroll">
       <h2 className="font-display text-3xl md:text-4xl text-wedding-gold mb-2">
         {t('countdown.title')}
       </h2>

@@ -170,13 +170,65 @@
           '.tp-caption',
           '.tp-caption img',
           'img[src*="venue-hedsor-front"]',
-          'img[src*="bow-illustration"]'
+          'img[src*="bow-illustration"]',
+          '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="venue-hedsor-front"])',
+          '.py-24.px-6.bg-white.reveal-on-scroll:has(img[src*="bow-illustration"])'
         ];
         selectors.forEach(s => {
           document.querySelectorAll(s).forEach(el => {
             el.style.setProperty('display', 'none', 'important');
           });
         });
+
+        // Specifically target and hide the mansion/bow sections more aggressively
+        // These sections often have large padding that leaves a gap
+        document.querySelectorAll('section').forEach(section => {
+          const innerHTML = section.innerHTML;
+          if (innerHTML.includes('venue-hedsor-front') || innerHTML.includes('bow-illustration')) {
+            section.style.setProperty('display', 'none', 'important');
+            section.style.setProperty('height', '0', 'important');
+            section.style.setProperty('padding', '0', 'important');
+            section.style.setProperty('margin', '0', 'important');
+          }
+          // Also hide any dividers/spacers that might be empty
+          if (section.children.length === 1 && section.querySelector('.h-\\[1px\\]')) {
+             // This might be a separator section
+             section.style.setProperty('display', 'none', 'important');
+          }
+        });
+
+        // Hide any empty div with a horizontal line between Countdown and Program
+        // This is a common pattern in the compiled code
+        const allDivs = document.querySelectorAll('div');
+        allDivs.forEach(div => {
+           if (div.classList.contains('h-[1px]') || (div.style.height === '1px' && div.style.width !== '100%')) {
+              // Check if it's a standalone divider causing a gap
+              const parent = div.parentElement;
+              if (parent && parent.innerText.trim() === '' && parent.tagName === 'SECTION') {
+                 parent.style.setProperty('display', 'none', 'important');
+              }
+           }
+        });
+
+        // Fix the large gap between Countdown and Day Programme
+        const countdownHeader = Array.from(document.querySelectorAll('h2')).find(h => h.innerText.toLowerCase().includes('count') || h.innerText.toLowerCase().includes('cuenta'));
+        const programHeader = Array.from(document.querySelectorAll('h2')).find(h => h.innerText.toLowerCase().includes('program') || h.innerText.toLowerCase().includes('día'));
+        
+        if (countdownHeader && programHeader) {
+           const countdownSection = countdownHeader.closest('section');
+           const programSection = programHeader.closest('section');
+           if (countdownSection && programSection) {
+              countdownSection.style.setProperty('padding-bottom', '0px', 'important');
+              programSection.style.setProperty('padding-top', '20px', 'important');
+              
+              // Find any elements between them and hide them
+              let next = countdownSection.nextElementSibling;
+              while (next && next !== programSection) {
+                 next.style.setProperty('display', 'none', 'important');
+                 next = next.nextElementSibling;
+              }
+           }
+        }
         
         // Hide Gift Section in Production
         const sections = document.querySelectorAll('section');

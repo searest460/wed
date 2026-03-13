@@ -14,9 +14,9 @@ export const ProgramTimeline = () => {
   ];
 
   return (
-    <section className="py-24 px-6 bg-wedding-ivory reveal-on-scroll">
+    <section className="pt-0 pb-24 px-6 bg-wedding-ivory reveal-on-scroll">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 pt-12">
           <h2 className="font-display text-4xl md:text-5xl text-wedding-gold mb-4">
             {t('program.title')}
           </h2>
