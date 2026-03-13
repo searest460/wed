@@ -175,6 +175,29 @@
       }
     </style>
     <script>
+      // More aggressive approach for '00:00 FINISH'
+      const hideFinish = () => {
+        try {
+          document.querySelectorAll('.flex.items-center.group, .grid.grid-cols-2, .relative.flex.items-center, section div div').forEach(el => {
+            const text = el.innerText.toUpperCase();
+            if (text.includes('00:00') && (text.includes('FINISH') || text.includes('FINAL') || text.includes('TERMINAR'))) {
+                // Find the container (usually a group or a grid row)
+                let container = el;
+                if (el.classList.contains('group') || el.classList.contains('grid')) {
+                  container = el;
+                } else {
+                  container = el.closest('.group') || el.closest('.grid') || el.closest('div[class*="items-center"]');
+                }
+                
+                if (container) {
+                  container.style.setProperty('display', 'none', 'important');
+                  container.style.setProperty('visibility', 'hidden', 'important');
+                }
+            }
+          });
+        } catch (e) {}
+      };
+
       // Force hide any persistent elements that might be the question mark
       const hideElements = () => {
         const selectors = [
@@ -209,28 +232,6 @@
           } catch (e) {}
         });
 
-        // More aggressive approach for '00:00 FINISH'
-        const hideFinish = () => {
-          try {
-            document.querySelectorAll('.flex.items-center.group, .grid.grid-cols-2, .relative.flex.items-center, section div div').forEach(el => {
-              const text = el.innerText.toUpperCase();
-              if (text.includes('00:00') && (text.includes('FINISH') || text.includes('FINAL') || text.includes('TERMINAR'))) {
-                  // Find the container (usually a group or a grid row)
-                  let container = el;
-                  if (el.classList.contains('group') || el.classList.contains('grid')) {
-                    container = el;
-                  } else {
-                    container = el.closest('.group') || el.closest('.grid') || el.closest('div[class*="items-center"]');
-                  }
-                  
-                  if (container) {
-                    container.style.setProperty('display', 'none', 'important');
-                    container.style.setProperty('visibility', 'hidden', 'important');
-                  }
-              }
-            });
-          } catch (e) {}
-        };
         hideFinish();
 
         // Aggressively scan and hide broken images (iOS fix)
@@ -367,17 +368,20 @@
         sections.forEach(section => {
           const header = section.querySelector('h2');
           if (header && (header.innerText.toLowerCase().includes('count') || header.innerText.toLowerCase().includes('cuenta'))) {
-            const timeContainer = section.querySelector('.flex.items-center.justify-center');
+            // Find the container that holds the numbers
+            const timeContainer = section.querySelector('.flex.items-center.justify-center') || 
+                                  section.querySelector('div[class*="flex"][class*="items-center"][class*="justify-center"]');
+            
             if (timeContainer) {
               // Target date: 12 September 2026
               const targetDate = new Date('2026-09-12T00:00:00').getTime();
               
-              // If we already patched this section, just return
-              if (timeContainer.dataset.patched) return;
-              timeContainer.dataset.patched = 'true';
+              // We check if the container has our specific structure already
+              if (timeContainer.querySelector('.countdown-wrapper')) {
+                // Just update values if needed (though the interval handles it)
+                return;
+              }
 
-              // Hide the existing content to avoid flicker or mismatch
-              // We'll create our own clean display
               const isEs = document.documentElement.lang === 'es' || header.innerText.toLowerCase().includes('cuenta');
               
               const createUnit = (label) => `
@@ -408,7 +412,6 @@
               `;
 
               const valElements = timeContainer.querySelectorAll('.countdown-val');
-              console.log('Countdown elements found:', valElements.length);
               
               const update = () => {
                 const now = new Date().getTime();
@@ -420,14 +423,18 @@
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((diff % (1000 * 60)) / 1000);
                 
-                if (valElements[0]) valElements[0].innerText = d.toString().padStart(2, '0');
-                if (valElements[1]) valElements[1].innerText = h.toString().padStart(2, '0');
-                if (valElements[2]) valElements[2].innerText = m.toString().padStart(2, '0');
-                if (valElements[3]) valElements[3].innerText = s.toString().padStart(2, '0');
+                // Always query elements again to ensure they are still in the DOM
+                const currentVals = timeContainer.querySelectorAll('.countdown-val');
+                if (currentVals[0]) currentVals[0].innerText = d.toString().padStart(2, '0');
+                if (currentVals[1]) currentVals[1].innerText = h.toString().padStart(2, '0');
+                if (currentVals[2]) currentVals[2].innerText = m.toString().padStart(2, '0');
+                if (currentVals[3]) currentVals[3].innerText = s.toString().padStart(2, '0');
               };
               
               update();
-              setInterval(update, 1000);
+              // Store interval ID to clear it if needed (optional but cleaner)
+              if (window.countdownInterval) clearInterval(window.countdownInterval);
+              window.countdownInterval = setInterval(update, 1000);
             }
           }
         });
