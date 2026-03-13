@@ -271,7 +271,11 @@
               // Check if it's a standalone divider causing a gap
               const parent = div.parentElement;
               if (parent && parent.innerText.trim() === '' && parent.tagName === 'SECTION') {
-                 parent.style.setProperty('display', 'none', 'important');
+                 // RESTORE: Check if this section contains decorative elements
+                 const hasDecoration = parent.querySelector('img[src*="floral-vase"], img[src*="cupid"], img[src*="locket"], img[src*="matchbox"], img[src*="swans"], img[src*="wedding-rings"]');
+                 if (!hasDecoration) {
+                    parent.style.setProperty('display', 'none', 'important');
+                 }
               }
            }
         });
@@ -288,10 +292,13 @@
               countdownSection.style.setProperty('padding-bottom', '80px', 'important');
               programSection.style.setProperty('padding-top', '80px', 'important');
               
-              // Find any elements between them and hide them
+              // Find any elements between them and hide them (but NOT decorations)
               let next = countdownSection.nextElementSibling;
               while (next && next !== programSection) {
-                 next.style.setProperty('display', 'none', 'important');
+                 const hasDecoration = next.querySelector('img[src*="floral-vase"], img[src*="cupid"], img[src*="locket"], img[src*="matchbox"], img[src*="swans"], img[src*="wedding-rings"]');
+                 if (!hasDecoration) {
+                    next.style.setProperty('display', 'none', 'important');
+                 }
                  next = next.nextElementSibling;
               }
            }
@@ -305,12 +312,15 @@
               preWeddingSection.style.setProperty('padding-top', '60px', 'important');
               preWeddingSection.style.setProperty('margin-top', '40px', 'important');
               
-              // Find any elements between them and hide them
+              // Find any elements between them and hide them (but NOT decorations)
               let next = programSection.nextElementSibling;
               while (next && next !== preWeddingSection) {
-                 next.style.setProperty('display', 'none', 'important');
-                 next.style.setProperty('height', '0', 'important');
-                 next.style.setProperty('padding', '0', 'important');
+                 const hasDecoration = next.querySelector('img[src*="floral-vase"], img[src*="cupid"], img[src*="locket"], img[src*="matchbox"], img[src*="swans"], img[src*="wedding-rings"]');
+                 if (!hasDecoration) {
+                    next.style.setProperty('display', 'none', 'important');
+                    next.style.setProperty('height', '0', 'important');
+                    next.style.setProperty('padding', '0', 'important');
+                 }
                  next = next.nextElementSibling;
               }
            }
