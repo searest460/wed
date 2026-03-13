@@ -165,14 +165,26 @@
             // Find the time display container
             const timeContainer = section.querySelector('.flex.items-center.justify-center');
             if (timeContainer) {
-              // Check if seconds are already there
-              const labels = Array.from(timeContainer.querySelectorAll('div[class*="text-[10px]"]'));
+              // Look for the units
+              const units = Array.from(timeContainer.querySelectorAll('.flex-col.items-center'));
+              if (units.length < 3) return;
+
+              // Check if seconds are already added by us
+              const labels = Array.from(timeContainer.querySelectorAll('div[class*="text-"]'));
               const hasSeconds = labels.some(l => l.innerText.toLowerCase().includes('second') || l.innerText.toLowerCase().includes('segundo'));
               
               if (!hasSeconds) {
                 // Target date: 12 September 2026
                 const targetDate = new Date('2026-09-12T00:00:00').getTime();
                 
+                // Capture the styling from existing elements to ensure consistency
+                const firstUnitVal = units[0].querySelector('div:first-child');
+                const firstUnitLabel = units[0].querySelector('div:last-child');
+                
+                // Capture the separator styling (the vertical lines '|')
+                const existingSeps = Array.from(timeContainer.children).filter(el => !el.classList.contains('flex-col'));
+                const firstSep = existingSeps[0];
+
                 // Function to update the countdown
                 const updateDisplay = () => {
                   const now = new Date().getTime();
@@ -186,14 +198,12 @@
                   const secs = Math.floor((diff % (1000 * 60)) / 1000);
                   
                   // Clear and rebuild or update
-                  // Since we want to be safe, let's just ensure 4 units exist
-                  const units = timeContainer.querySelectorAll('.flex-col.items-center');
-                  const separators = timeContainer.querySelectorAll('.text-wedding-gold.text-2xl');
+                  const currentUnits = timeContainer.querySelectorAll('.flex-col.items-center');
                   
-                  if (units.length >= 3) {
+                  if (currentUnits.length >= 3) {
                     // Update existing
                     const setVal = (idx, val) => {
-                      const valEl = units[idx].querySelector('div[class*="text-3xl"]');
+                      const valEl = currentUnits[idx].querySelector('div:first-child');
                       if (valEl) valEl.innerText = val.toString().padStart(2, '0');
                     };
                     
@@ -202,31 +212,36 @@
                     setVal(2, mins);
                     
                     // Add seconds if missing
-                    if (units.length === 3) {
-                      // Add separator
+                    if (currentUnits.length === 3) {
+                      // Add separator matching existing ones
                       const sep = document.createElement('div');
-                      sep.className = 'text-wedding-gold text-2xl pb-6 mx-1 md:mx-2';
-                      sep.innerText = ':';
+                      if (firstSep) {
+                        sep.className = firstSep.className;
+                        sep.innerText = firstSep.innerText || '|';
+                      } else {
+                        sep.className = 'text-wedding-gold text-2xl pb-6 mx-1 md:mx-2 opacity-30';
+                        sep.innerText = '|';
+                      }
                       timeContainer.appendChild(sep);
                       
-                      // Add seconds unit
+                      // Add seconds unit matching existing one
                       const secUnit = document.createElement('div');
-                      secUnit.className = 'flex flex-col items-center mx-2 md:mx-4';
+                      secUnit.className = units[0].className;
                       
                       const secVal = document.createElement('div');
-                      secVal.className = 'text-3xl md:text-5xl font-light text-wedding-gold mb-1';
+                      if (firstUnitVal) secVal.className = firstUnitVal.className;
                       secVal.innerText = secs.toString().padStart(2, '0');
                       secUnit.appendChild(secVal);
                       
                       const secLabel = document.createElement('div');
-                      secLabel.className = 'text-[10px] md:text-xs uppercase tracking-widest text-wedding-sage';
+                      if (firstUnitLabel) secLabel.className = firstUnitLabel.className;
                       // Use language detection
                       const isEs = document.documentElement.lang === 'es' || header.innerText.toLowerCase().includes('cuenta');
                       secLabel.innerText = isEs ? 'Segundos' : 'Seconds';
                       secUnit.appendChild(secLabel);
                       
                       timeContainer.appendChild(secUnit);
-                    } else if (units.length === 4) {
+                    } else if (currentUnits.length === 4) {
                       setVal(3, secs);
                     }
                   }
