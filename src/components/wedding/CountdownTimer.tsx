@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useWedding } from '@/context/WeddingContext';
 
 export const CountdownTimer = () => {
   const { t } = useTranslation();
-  const targetDate = new Date('2026-09-12T00:00:00');
+  const { data } = useWedding();
+  const targetDate = new Date(data.weddingDate + 'T00:00:00');
   
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -31,7 +33,7 @@ export const CountdownTimer = () => {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [data.weddingDate]);
 
   const TimeUnit = ({ value, label }: { value: number, label: string }) => (
     <div className="flex flex-col items-center mx-2 md:mx-4">
@@ -50,7 +52,7 @@ export const CountdownTimer = () => {
         {t('countdown.title')}
       </h2>
       <p className="text-wedding-sage text-sm mb-8 italic">
-        {t('countdown.until')}
+        {t('countdown.until')} {new Date(data.weddingDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}
       </p>
       
       <div className="flex items-center justify-center">

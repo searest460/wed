@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
+import { useWedding } from '@/context/WeddingContext';
 
 export const InvitationCard = () => {
   const { t } = useTranslation();
+  const { data } = useWedding();
 
   return (
     <section className="relative h-screen w-full flex flex-col items-center justify-center text-white text-center overflow-hidden">
@@ -13,21 +15,21 @@ export const InvitationCard = () => {
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center max-w-4xl px-6">
         <h2 className="text-sm md:text-base uppercase tracking-[0.3em] mb-8 font-light">
-          {t('hero.subtitle')}
+          {data.heroSubtitle || t('hero.subtitle')}
         </h2>
         
         <h1 className="font-display text-7xl md:text-9xl mb-4 text-white drop-shadow-lg">
-          Andrea
+          {data.brideName}
         </h1>
         <span className="font-display text-4xl md:text-5xl mb-4 italic opacity-80">&</span>
         <h1 className="font-display text-7xl md:text-9xl mb-12 text-white drop-shadow-lg">
-          Pedro
+          {data.groomName}
         </h1>
         
         <div className="flex items-center space-x-4 mb-16">
           <div className="h-[1px] w-8 md:w-12 bg-white/50" />
           <span className="text-lg md:text-2xl font-light tracking-widest uppercase">
-            {t('hero.date')}
+            {new Date(data.weddingDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}
           </span>
           <div className="h-[1px] w-8 md:w-12 bg-white/50" />
         </div>
