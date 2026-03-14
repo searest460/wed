@@ -18,22 +18,18 @@ export const CoupleSection = () => {
   const { t } = useTranslation();
 
   const ImageList = () => (
-    <div className="flex gap-4 pr-4 shrink-0">
+    <div className="flex gap-4 pr-4 shrink-0 min-w-full">
       {galleryImages.map((src, index) => (
         <div 
           key={`${src}-${index}`} 
-          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm bg-wedding-ivory"
+          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm bg-wedding-ivory relative"
         >
           <img 
             src={src} 
             alt={`Gallery ${index + 1}`} 
-            className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover transition-all duration-700 hover:scale-105"
             draggable={false}
-            onLoad={() => console.log(`Loaded ${src}`)}
-            onError={(e) => {
-              console.error(`Failed to load ${src}`);
-              e.currentTarget.style.display = 'none';
-            }}
+            loading="lazy"
           />
         </div>
       ))}
