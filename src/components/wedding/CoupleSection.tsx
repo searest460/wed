@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const images = [
+const galleryImages = [
   '/assets/gallery-1-CndRyTXZ.jpg',
   '/assets/gallery-2-LJ9SqFT7.jpg',
   '/assets/gallery-3-BqTMMcNY.jpg',
@@ -17,6 +17,24 @@ const images = [
 export const CoupleSection = () => {
   const { t } = useTranslation();
 
+  const ImageList = () => (
+    <div className="flex gap-4 pr-4 shrink-0">
+      {galleryImages.map((src, index) => (
+        <div 
+          key={index} 
+          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm"
+        >
+          <img 
+            src={src} 
+            alt={`Gallery ${index + 1}`} 
+            className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
+            draggable={false}
+          />
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <section className="py-20 bg-white text-center reveal-on-scroll">
       <div className="max-w-7xl mx-auto px-6">
@@ -30,39 +48,12 @@ export const CoupleSection = () => {
 
       <div className="w-full overflow-hidden">
         <div className="flex w-max animate-marquee hover:[animation-play-state:paused] transform-gpu">
-          {/* First set of images */}
-          <div className="flex gap-4 pr-4">
-            {images.map((src, index) => (
-              <div 
-                key={`a-${index}`} 
-                className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm"
-              >
-                <img 
-                  src={src} 
-                  alt={`Gallery ${index + 1}`} 
-                  className="w-full h-full object-cover transition-all duration-700"
-                />
-              </div>
-            ))}
-          </div>
-          {/* Second set of images for seamless loop */}
-          <div className="flex gap-4 pr-4">
-            {images.map((src, index) => (
-              <div 
-                key={`b-${index}`} 
-                className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm"
-              >
-                <img 
-                  src={src} 
-                  alt={`Gallery ${index + 1}`} 
-                  className="w-full h-full object-cover transition-all duration-700"
-                />
-              </div>
-            ))}
-          </div>
+          <ImageList />
+          <ImageList />
         </div>
       </div>
     </section>
   );
 };
+
 
