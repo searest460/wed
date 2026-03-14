@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
-import { useWedding } from '@/context/WeddingContext';
 
 export const EnvelopeScene = ({ onOpen }: { onOpen: () => void }) => {
   const [isOpening, setIsOpening] = useState(false);
-  const { data } = useWedding();
 
   const handleOpen = () => {
     setIsOpening(true);
@@ -33,7 +31,7 @@ export const EnvelopeScene = ({ onOpen }: { onOpen: () => void }) => {
               </div>
               
               <div className="text-center mt-20">
-                <h1 className="font-display text-3xl text-wedding-gold mb-2">{data.brideName} & {data.groomName}</h1>
+                <h1 className="font-display text-3xl text-wedding-gold mb-2">Andrea & Pedro</h1>
                 <p className="text-wedding-sage text-xs uppercase tracking-[0.2em]">Click to Open</p>
               </div>
             </div>

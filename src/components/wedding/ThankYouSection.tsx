@@ -1,14 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
-import { useWedding } from '@/context/WeddingContext';
 
 export const ThankYouSection = () => {
   const { t } = useTranslation();
-  const { data } = useWedding();
 
   return (
-    <section className="py-32 px-6 bg-white text-center reveal-on-scroll">
+    <section className="py-32 px-6 bg-white text-center reveal-on-scroll wedding-footer">
       <div className="max-w-3xl mx-auto">
         <Heart className="w-12 h-12 text-wedding-gold mx-auto mb-8 fill-current opacity-20" />
         
@@ -23,10 +21,10 @@ export const ThankYouSection = () => {
         <div className="flex flex-col items-center">
           <div className="h-[1px] w-24 bg-wedding-gold/30 mb-8" />
           <p className="font-body text-sm uppercase tracking-[0.3em] text-wedding-sage">
-            {data.brideName} & {data.groomName}
+            Andrea & Pedro
           </p>
           <p className="mt-4 text-xs text-wedding-carbon/40 uppercase tracking-widest">
-            {new Date(data.weddingDate).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.')} • Ronda, Spain
+            12.09.2026 • Ronda, Spain
           </p>
         </div>
       </div>

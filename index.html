@@ -29,6 +29,7 @@
         -moz-osx-font-smoothing: grayscale;
         background-color: #fdfbf7;
         overflow-x: hidden;
+        scroll-padding-bottom: 100px;
       }
 
       body {
@@ -165,10 +166,11 @@
         max-width: 120px;
       }
 
+      .countdown-val {
+        font-size: clamp(2.5rem, 8vw, 6rem) !important;
+      }
+
       @media (max-width: 640px) {
-        .countdown-val {
-          font-size: 2.5rem !important;
-        }
         .countdown-unit {
           min-width: 50px;
         }
@@ -177,28 +179,11 @@
         }
       }
 
-      @media (min-width: 641px) and (max-width: 1024px) {
-        .countdown-val {
-          font-size: 4rem !important;
-        }
-      }
-
-      @media (min-width: 1025px) {
-        .countdown-val {
-          font-size: 6rem !important;
-        }
-      }
-
-      /* Fix for footer jumping */
+      /* Ensure the last section doesn't jump or cause layout shift */
       #root > div > section:last-of-type {
         margin-bottom: 0 !important;
-        padding-bottom: 10rem !important;
-      }
-
-      /* Disable reveal animation for the very last section to prevent jumping */
-      #root > div > section:last-of-type.reveal-on-scroll {
-        opacity: 1 !important;
-        transform: none !important;
+        padding-bottom: 12rem !important; /* Extra breathing room at bottom */
+        min-height: 40vh; /* Ensure footer feels like a footer */
       }
 
       /* Fix for squashed images and layout issues */
@@ -620,18 +605,26 @@
                 farewellImg.dataset.swapped = 'true';
              }
           }
+
+          /* Handle the reveal for the last section more aggressively */
+          const allSections = document.querySelectorAll('#root section');
+          if (allSections.length > 0) {
+            const lastSection = allSections[allSections.length - 1];
+            // If we are at the bottom of the page, force reveal the last section
+            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+              lastSection.classList.add('active');
+            }
+          }
         });
 
-        // IntersectionObserver for scroll animations
+      /* IntersectionObserver for scroll animations */
         const revealObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('active');
-              // UNOSERVE: Once revealed, stay revealed to prevent "pulling back" effect
-              revealObserver.unobserve(entry.target); 
             }
           });
-        }, { threshold: 0.05, rootMargin: '0px 0px 100px 0px' });
+        }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
 
         observer.observe(document.body, { childList: true, subtree: true });
         window.addEventListener('load', moveVideo);

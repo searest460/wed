@@ -1,18 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Clock, Music, GlassWater, Utensils, Cake } from 'lucide-react';
-import { useWedding } from '@/context/WeddingContext';
 
 export const ProgramTimeline = () => {
   const { t } = useTranslation();
-  const { data } = useWedding();
 
   const events = [
-    { time: data.eventDetails.arrival, title: t('program.arrival'), icon: Clock },
-    { time: data.eventDetails.ceremony, title: t('program.ceremony'), icon: Music },
-    { time: data.eventDetails.cocktails, title: t('program.cocktails'), icon: GlassWater },
-    { time: data.eventDetails.dinner, title: t('program.dinner'), icon: Utensils },
-    { time: data.eventDetails.cake, title: t('program.cake'), icon: Cake },
+    { time: '17:30', title: t('program.arrival'), icon: Clock },
+    { time: '18:00', title: t('program.ceremony'), icon: Music },
+    { time: '19:00', title: t('program.cocktails'), icon: GlassWater },
+    { time: '21:00', title: t('program.dinner'), icon: Utensils },
+    { time: '23:30', title: t('program.cake'), icon: Cake },
   ];
 
   return (
@@ -23,7 +21,7 @@ export const ProgramTimeline = () => {
             {t('program.title')}
           </h2>
           <p className="text-wedding-sage uppercase tracking-widest text-sm">
-            {new Date(data.weddingDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}
+            {t('program.date')}
           </p>
         </div>
         
