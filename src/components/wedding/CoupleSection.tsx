@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageCarousel } from './ImageCarousel';
 
 export const CoupleSection = () => {
   const { t } = useTranslation();
@@ -33,16 +32,12 @@ export const CoupleSection = () => {
           </div>
         </div>
         
-        <div className="mt-16 mb-12 flex justify-center">
+        <div className="mt-16 mb-4 flex justify-center">
           <img 
             src="/assets/floral-vase-6x28LN74.png" 
             alt="Floral decoration" 
             className="w-32 md:w-40 h-auto opacity-80"
           />
-        </div>
-        
-        <div className="mt-12 -mx-6">
-          <ImageCarousel />
         </div>
       </div>
     </section>

@@ -15,22 +15,28 @@ const images = [
 
 export const ImageCarousel = () => {
   return (
-    <div className="w-full overflow-hidden bg-white py-12">
+    <div className="w-full overflow-hidden bg-white pb-16 md:pb-20">
       <div 
-        className="flex animate-marquee gap-4 pr-4 hover:[animation-play-state:paused]"
-        style={{ width: 'max-content' }}
+        className="flex animate-marquee hover:[animation-play-state:paused] transform-gpu flex-nowrap"
+        style={{ 
+          width: 'max-content', 
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
+          perspective: 1000
+        }}
       >
         {/* Double the images for seamless loop */}
         {[...images, ...images].map((src, index) => (
           <div 
             key={index} 
-            className="flex-shrink-0 w-64 h-80 md:w-80 md:h-96 rounded-lg overflow-hidden shadow-md"
+            className="flex-shrink-0 w-64 h-80 md:w-80 md:h-96 rounded-lg overflow-hidden shadow-md px-2"
           >
             <img 
               src={src} 
               alt={`Gallery ${index % images.length + 1}`} 
-              className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
               draggable={false}
+              loading={index < 5 ? "eager" : "lazy"}
             />
           </div>
         ))}
