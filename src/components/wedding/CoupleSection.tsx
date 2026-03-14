@@ -40,7 +40,7 @@ export const CoupleSection = () => {
                 <img 
                   src={src} 
                   alt={`Gallery ${index + 1}`} 
-                  className="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                  className="w-full h-full object-cover transition-all duration-700"
                 />
               </div>
             ))}
@@ -55,7 +55,7 @@ export const CoupleSection = () => {
                 <img 
                   src={src} 
                   alt={`Gallery ${index + 1}`} 
-                  className="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                  className="w-full h-full object-cover transition-all duration-700"
                 />
               </div>
             ))}
