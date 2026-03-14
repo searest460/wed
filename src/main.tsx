@@ -19,7 +19,7 @@ i18n.use(initReactI18next).init({
         "countdown.minutes": "Minutes",
         "countdown.seconds": "Seconds",
         "welcome.title": "Welcome!",
-        "welcome.text": "We warmly invite you to celebrate our wedding day with us in the beautiful town of Ronda, Andalusia. We look forward to sharing this unforgettable moment with our most special people.",
+        "welcome.text": "We warmly invite you to celebrate our wedding day with us in the beautiful town of Ronda, Andalusia.\nWe look forward to sharing this unforgettable moment with our most special people.",
         "events.title": "The Venue",
         "events.subtitle": "Where we celebrate",
         "events.date": "12 September 2026",

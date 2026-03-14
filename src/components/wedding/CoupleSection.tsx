@@ -21,14 +21,19 @@ export const CoupleSection = () => {
     <div className="flex gap-4 pr-4 shrink-0">
       {galleryImages.map((src, index) => (
         <div 
-          key={index} 
-          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm"
+          key={`${src}-${index}`} 
+          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm bg-wedding-ivory"
         >
           <img 
             src={src} 
             alt={`Gallery ${index + 1}`} 
             className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
             draggable={false}
+            onLoad={() => console.log(`Loaded ${src}`)}
+            onError={(e) => {
+              console.error(`Failed to load ${src}`);
+              e.currentTarget.style.display = 'none';
+            }}
           />
         </div>
       ))}
@@ -41,9 +46,9 @@ export const CoupleSection = () => {
         <h2 className="font-display text-4xl md:text-6xl text-wedding-gold mb-8">
           {t('welcome.title')}
         </h2>
-        <p className="text-wedding-carbon text-lg md:text-xl leading-relaxed font-light italic max-w-3xl mx-auto mb-16">
-          "{t('welcome.text')}"
-        </p>
+        <div className="text-wedding-carbon text-lg md:text-xl leading-relaxed font-light italic max-w-3xl mx-auto mb-16 whitespace-pre-line">
+          {t('welcome.text')}
+        </div>
       </div>
 
       <div className="w-full overflow-hidden">
