@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { EnvelopeScene } from "@/components/wedding/EnvelopeScene";
 import { InvitationCard } from "@/components/wedding/InvitationCard";
 import { CoupleSection } from "@/components/wedding/CoupleSection";
+import { ImageCarousel } from "@/components/wedding/ImageCarousel";
 import { CountdownTimer } from "@/components/wedding/CountdownTimer";
 import { ProgramTimeline } from "@/components/wedding/ProgramTimeline";
 import { DressCode } from "@/components/wedding/DressCode";
@@ -26,6 +27,9 @@ const Index = () => {
           <WhatsAppButton />
           <InvitationCard />
           <CoupleSection />
+          <div className="bg-white">
+            <ImageCarousel />
+          </div>
           <CountdownTimer />
           <ProgramTimeline />
           <DressCode />

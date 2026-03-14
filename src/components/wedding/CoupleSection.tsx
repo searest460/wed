@@ -1,60 +1,45 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const galleryImages = [
-  '/assets/gallery-1-CndRyTXZ.jpg',
-  '/assets/gallery-2-LJ9SqFT7.jpg',
-  '/assets/gallery-3-BqTMMcNY.jpg',
-  '/assets/gallery-4-D3agzgGx.jpg',
-  '/assets/gallery-5-Ca9X0lht.jpg',
-  '/assets/gallery-6-KQCB4EG9.jpg',
-  '/assets/gallery-7-CHFbVCJd.jpg',
-  '/assets/gallery-8-LSBB5t-f.jpg',
-  '/assets/gallery-9-C_h0QLUe.jpg',
-  '/assets/gallery-10-BbneIAac.jpg',
-];
-
 export const CoupleSection = () => {
   const { t } = useTranslation();
 
-  const ImageList = () => (
-    <div className="flex gap-4 pr-4 shrink-0 min-w-full">
-      {galleryImages.map((src, index) => (
-        <div 
-          key={`${src}-${index}`} 
-          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-[450px] rounded-sm overflow-hidden shadow-sm bg-wedding-ivory relative"
-        >
+  return (
+    <section className="py-20 px-6 bg-white text-center reveal-on-scroll">
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-12 flex justify-center">
           <img 
-            src={src} 
-            alt={`Gallery ${index + 1}`} 
-            className="absolute inset-0 w-full h-full object-cover transition-all duration-700 hover:scale-105"
-            draggable={false}
-            loading="lazy"
+            src="/assets/floral-vase-6x28LN74.png" 
+            alt="Floral decoration" 
+            className="w-32 md:w-40 h-auto opacity-80"
           />
         </div>
-      ))}
-    </div>
-  );
-
-  return (
-    <section className="py-20 bg-white text-center reveal-on-scroll">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="font-display text-4xl md:text-6xl text-wedding-gold mb-8">
+        
+        <h2 className="font-display text-4xl md:text-5xl text-wedding-gold mb-8">
           {t('welcome.title')}
         </h2>
-        <div className="text-wedding-carbon text-lg md:text-xl leading-relaxed font-light italic max-w-3xl mx-auto mb-16 whitespace-pre-line">
-          {t('welcome.text')}
-        </div>
-      </div>
-
-      <div className="w-full overflow-hidden">
-        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] transform-gpu">
-          <ImageList />
-          <ImageList />
+        <p className="text-wedding-carbon text-lg md:text-xl leading-relaxed font-light italic">
+          "{t('welcome.text')}"
+        </p>
+        
+        <div className="mt-12 flex justify-center items-center space-x-8">
+          <div className="flex flex-col items-center">
+            <div className="w-24 h-24 rounded-full bg-wedding-ivory border border-wedding-gold flex items-center justify-center mb-4">
+              <span className="font-display text-3xl text-wedding-gold">A</span>
+            </div>
+            <span className="font-body text-sm tracking-widest uppercase text-wedding-sage">Andrea</span>
+          </div>
+          
+          <span className="font-display text-4xl text-wedding-gold">&</span>
+          
+          <div className="flex flex-col items-center">
+            <div className="w-24 h-24 rounded-full bg-wedding-ivory border border-wedding-gold flex items-center justify-center mb-4">
+              <span className="font-display text-3xl text-wedding-gold">P</span>
+            </div>
+            <span className="font-body text-sm tracking-widest uppercase text-wedding-sage">Pedro</span>
+          </div>
         </div>
       </div>
     </section>
   );
 };
-
-
