@@ -19,14 +19,11 @@ export const ImageCarousel = () => {
       <div 
         className="flex animate-marquee hover:[animation-play-state:paused] transform-gpu flex-nowrap"
         style={{ 
-          width: 'max-content', 
-          willChange: 'transform',
-          backfaceVisibility: 'hidden',
-          perspective: 1000
+          width: 'max-content'
         }}
       >
-        {/* Double the images for seamless loop */}
-        {[...images, ...images].map((src, index) => (
+        {/* Quadruple the images for guaranteed seamless loop covering any screen width */}
+        {[...images, ...images, ...images, ...images].map((src, index) => (
           <div 
             key={index} 
             className="flex-shrink-0 w-64 h-80 md:w-80 md:h-96 rounded-lg overflow-hidden shadow-md px-2"
