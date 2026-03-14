@@ -14,29 +14,30 @@ const images = [
 ];
 
 export const ImageCarousel = () => {
+  const ImageList = () => (
+    <div className="flex animate-marquee gap-4 pr-4 py-4 shrink-0">
+      {images.map((src, index) => (
+        <div 
+          key={index} 
+          className="flex-shrink-0 w-64 h-80 md:w-80 md:h-96 rounded-lg overflow-hidden shadow-md"
+        >
+          <img 
+            src={src} 
+            alt={`Gallery ${index + 1}`} 
+            className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
+            draggable={false}
+            loading={index < 4 ? "eager" : "lazy"}
+          />
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="w-full overflow-hidden bg-white pb-16 md:pb-20">
-      <div 
-        className="flex animate-marquee hover:[animation-play-state:paused] transform-gpu flex-nowrap"
-        style={{ 
-          width: 'max-content'
-        }}
-      >
-        {/* Quadruple the images for guaranteed seamless loop covering any screen width */}
-        {[...images, ...images, ...images, ...images].map((src, index) => (
-          <div 
-            key={index} 
-            className="flex-shrink-0 w-64 h-80 md:w-80 md:h-96 rounded-lg overflow-hidden shadow-md px-2"
-          >
-            <img 
-              src={src} 
-              alt={`Gallery ${index % images.length + 1}`} 
-              className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
-              draggable={false}
-              loading={index < 5 ? "eager" : "lazy"}
-            />
-          </div>
-        ))}
+      <div className="flex w-max hover:[animation-play-state:paused] transform-gpu">
+        <ImageList />
+        <ImageList />
       </div>
     </div>
   );
